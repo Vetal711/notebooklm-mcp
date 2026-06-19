@@ -1,0 +1,7 @@
+mcp
+python-dotenv
+notebooklm-py[browser]
+playwright
+pytest
+pytest-mock
+pytest-asyncio
