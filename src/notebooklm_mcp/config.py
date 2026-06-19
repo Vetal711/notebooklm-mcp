@@ -1,9 +1,9 @@
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file if it exists
-load_dotenv()
-
+# Calculate absolute path to .env in the project root
+env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), '.env')
+load_dotenv(env_path)
 
 class Config:
     NOTEBOOKLM_CLI = os.getenv("NOTEBOOKLM_CLI", "notebooklm")

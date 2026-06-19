@@ -25,15 +25,6 @@ def update_json_file(file_path, server_name, command):
         "args": []
     }
 
-    if "venv" in command:
-        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(command)))
-        cli_path = os.path.join(base_dir, "venv", "Scripts", "notebooklm.exe")
-        log_path = os.path.join(base_dir, "logs", "notebooklm-mcp.log")
-        server_config["env"] = {
-            "NOTEBOOKLM_CLI": cli_path,
-            "LOG_FILE": log_path
-        }
-
     data["mcpServers"][server_name] = server_config
 
     with open(file_path, 'w', encoding='utf-8') as f:
@@ -50,6 +41,19 @@ def main():
         python_executable = "notebooklm-mcp" # Fallback to global command
     
     print(f"Using server command: {python_executable}")
+
+    base_dir = os.getcwd()
+    env_path = os.path.join(base_dir, ".env")
+    cli_path = os.path.join(base_dir, "venv", "Scripts", "notebooklm.exe")
+    log_path = os.path.join(base_dir, "logs", "notebooklm-mcp.log")
+    
+    # Create logs directory if it doesn't exist
+    os.makedirs(os.path.join(base_dir, "logs"), exist_ok=True)
+    
+    with open(env_path, "w", encoding="utf-8") as f:
+        f.write(f"NOTEBOOKLM_CLI={cli_path}\n")
+        f.write(f"LOG_FILE={log_path}\n")
+    print(f"Created local .env file at {env_path}")
 
     user_home = os.path.expanduser("~")
     
