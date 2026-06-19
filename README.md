@@ -1,8 +1,8 @@
-# NotebookLM MCP Server v0.5
+# NotebookLM MCP Server v1.0
 
 Production-ready, fully asynchronous Model Context Protocol (MCP) server for Google NotebookLM.
 
-This server acts as a bridge between AI agents (like Claude Code, Cursor) and NotebookLM.
+This server acts as a bridge between AI agents (like Claude Desktop, Cursor, Antigravity) and NotebookLM, allowing your AI to read your notebooks, interact with your sources, and generate reports.
 
 ## Features
 
@@ -13,32 +13,92 @@ This server acts as a bridge between AI agents (like Claude Code, Cursor) and No
 - **Multi-language Support (i18n)**: All tool docstrings are in English, ensuring seamless compatibility with any LLM globally.
 - **Network Mode (SSE Transport)**: Supports both Standard I/O (local) and SSE (network) transport protocols.
 - **Retries & Caching**: Temporary CLI failures are retried automatically. Read operations are cached.
-- **Centralized Configuration**: Managed via `.env` file with sensible defaults.
 - **Diagnostics**: Built-in `health_check()` tool to verify CLI availability and authentication status.
-- **Logging**: Rotating console and file logs (at `logs/notebooklm-mcp.log`), without duplication.
-- **Docker & CI/CD Support**: Containerized for easy deployment and tested automatically via GitHub Actions (with auto PyPI publish).
+
+---
 
 ## Installation
 
-### Local Installation
+You can install this server either automatically (recommended) or manually.
 
-The server is packaged as a standard Python module, meaning you can install it globally with a single command.
+### Method A: One-Click Automatic Install (Recommended)
 
-1. Install directly from this repository:
-```bash
-pip install -e .
-```
-*(If the repository is pushed to GitHub, users can do: `pip install git+https://github.com/your-username/notebooklm-mcp.git`)*
+This method automatically sets up a virtual environment, installs all dependencies (including `notebooklm-py` and Chromium for Playwright), and registers the server in your IDEs (Claude Desktop, Cursor, Antigravity).
 
-2. To support authentication, install the browser driver:
-```bash
-playwright install chromium
-```
+1. Clone or download this repository:
+   ```bash
+   git clone https://github.com/Vetal711/notebooklm-mcp.git
+   cd notebooklm-mcp
+   ```
 
-3. Copy the configuration template and customize if necessary:
-```bash
-cp .env.example .env
-```
+2. Run the auto-installer script:
+   - **Windows**: Double-click `install.bat` (or run it in the terminal).
+   - **Mac/Linux**: Run `bash install.sh`
+
+3. Authenticate with Google:
+   Once the installation is complete, you must authenticate the CLI. Run the following command and follow the instructions in the browser window:
+   - **Windows**: `venv\Scripts\notebooklm.exe login`
+   - **Mac/Linux**: `./venv/bin/notebooklm login`
+
+4. Restart your IDE/Agent (Claude Desktop, Cursor, or Antigravity) and the server will be available!
+
+---
+
+### Method B: Manual Installation
+
+If you prefer to configure everything manually or use a global Python environment:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Vetal711/notebooklm-mcp.git
+   cd notebooklm-mcp
+   ```
+
+2. Create a virtual environment and install dependencies:
+   ```bash
+   python -m venv venv
+   # On Windows:
+   venv\Scripts\pip install -e .
+   # On Mac/Linux:
+   ./venv/bin/pip install -e .
+   ```
+
+3. Install the Playwright browser driver:
+   ```bash
+   # On Windows:
+   venv\Scripts\playwright install chromium
+   # On Mac/Linux:
+   ./venv/bin/playwright install chromium
+   ```
+
+4. Authenticate:
+   ```bash
+   # On Windows:
+   venv\Scripts\notebooklm.exe login
+   # On Mac/Linux:
+   ./venv/bin/notebooklm login
+   ```
+
+5. **Manual Configuration for MCP Clients**:
+   Instead of running the automated configuration script, you can manually add the following JSON block to your MCP client's configuration file (e.g., `claude_desktop_config.json`, `cline_mcp_settings.json`, or `mcp_config.json`).
+   
+   *Make sure to replace `/absolute/path/to/notebooklm-mcp` with the actual absolute path to your cloned directory.*
+
+   ```json
+   {
+     "mcpServers": {
+       "NotebookLM": {
+         "command": "/absolute/path/to/notebooklm-mcp/venv/bin/notebooklm-mcp",
+         "args": []
+       }
+     }
+   }
+   ```
+   *(Note for Windows users: Use `venv\\Scripts\\notebooklm-mcp.exe` and escape backslashes in paths).*
+
+   **Important:** The server automatically generates a `.env` file in its root directory upon first run or installation to manage absolute paths.
+
+---
 
 ### Docker Deployment
 
@@ -48,43 +108,3 @@ docker build -t notebooklm-mcp .
 docker run -i --rm -v ~/.notebooklm:/root/.notebooklm notebooklm-mcp
 ```
 *(Note: You need to mount the `.notebooklm` config directory to share your local authentication session).*
-
-## Configuration
-
-Modify your `.env` file to customize:
-
-- `NOTEBOOKLM_CLI`: The CLI command/path (default: `notebooklm`)
-- `NOTEBOOKLM_TIMEOUT`: Command timeout in seconds (default: `180`)
-- `LOG_LEVEL`: Logging detail level, e.g., `INFO`, `DEBUG`, `WARNING` (default: `INFO`)
-- `LOG_FILE`: Path to the log file (default: `logs/notebooklm-mcp.log`)
-
-## Authentication
-
-Before running the server, ensure you are authenticated with NotebookLM:
-
-```bash
-notebooklm login
-```
-
-If your session expires, you will see authentication errors in the logs, and the `health_check` tool will report it.
-
-## Running the Server
-
-Because it is installed as a package, you can start the MCP server from anywhere by simply typing:
-
-```bash
-# Start locally using stdio transport (default)
-notebooklm-mcp
-
-# Start as a network server using SSE transport
-notebooklm-mcp --transport sse --host 0.0.0.0 --port 8000
-```
-
-## Running Tests
-
-To run the test suite:
-```bash
-pytest
-```
-
-The server will perform a startup health check and begin listening for MCP client connections.
