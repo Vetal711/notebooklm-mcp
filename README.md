@@ -1,5 +1,6 @@
 # NotebookLM MCP Server v1.0
 
+*Read this in other languages: [Русский](README_RU.md)*
 Production-ready, fully asynchronous Model Context Protocol (MCP) server for Google NotebookLM.
 
 This server acts as a bridge between AI agents (like Claude Desktop, Cursor, Antigravity) and NotebookLM, allowing your AI to read your notebooks, interact with your sources, and generate reports.
