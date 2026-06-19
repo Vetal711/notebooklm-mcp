@@ -54,6 +54,7 @@ class NotebookLMClient:
                 process = await asyncio.create_subprocess_exec(
                     self.cli_command,
                     *args,
+                    stdin=asyncio.subprocess.DEVNULL,
                     stdout=asyncio.subprocess.PIPE,
                     stderr=asyncio.subprocess.PIPE,
                 )
