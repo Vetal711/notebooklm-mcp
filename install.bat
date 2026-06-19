@@ -19,6 +19,7 @@ if not exist venv (
 )
 
 echo [2/4] Installing dependencies...
+call venv\Scripts\python -m pip install --upgrade pip
 call venv\Scripts\pip install -e .
 
 echo [3/4] Installing Playwright Chromium browser...

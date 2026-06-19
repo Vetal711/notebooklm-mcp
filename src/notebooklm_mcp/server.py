@@ -204,7 +204,7 @@ def main():
         help="Transport protocol to use (stdio or sse)",
     )
     parser.add_argument(
-        "--host", type=str, default="0.0.0.0", help="Host to bind to for SSE transport"
+        "--host", type=str, default="127.0.0.1", help="Host to bind to for SSE transport"
     )
     parser.add_argument(
         "--port", type=int, default=8000, help="Port to bind to for SSE transport"

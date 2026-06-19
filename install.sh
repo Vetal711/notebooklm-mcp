@@ -19,6 +19,7 @@ if [ ! -d "venv" ]; then
 fi
 
 echo "[2/4] Installing dependencies..."
+./venv/bin/python -m pip install --upgrade pip
 ./venv/bin/pip install -e .
 
 echo "[3/4] Installing Playwright Chromium browser..."
