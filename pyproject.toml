@@ -15,7 +15,8 @@ dependencies = [
     "mcp",
     "python-dotenv",
     "notebooklm-py[browser]",
-    "playwright"
+    "playwright",
+    "watchdog"
 ]
 
 [project.scripts]

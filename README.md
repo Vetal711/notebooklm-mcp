@@ -97,7 +97,17 @@ If you prefer to configure everything manually or use a global Python environmen
    ```
    *(Note for Windows users: Use `venv\\Scripts\\notebooklm-mcp.exe` and escape backslashes in paths).*
 
-   **Important:** The server automatically generates a `.env` file in its root directory upon first run or installation to manage absolute paths.
+   **Important:** The server will automatically generate a `.env` file in the root folder on first run (or during installation) to handle absolute paths properly.
+
+---
+
+### Troubleshooting
+
+**Error: `Authentication expired or invalid`**
+If you receive this error in Claude/Cursor, it means the Playwright session's Google tokens have expired.
+**Solution:**
+1. Run the login command again: `venv\Scripts\notebooklm.exe login` (Windows) or `./venv/bin/notebooklm login` (Mac/Linux).
+2. Ensure that your MCP client's configuration file (e.g., `claude_desktop_config.json`) includes the `"cwd": "/absolute/path/to/notebooklm-mcp"` parameter. This ensures the server always runs from the correct folder and doesn't lose the session.
 
 ---
 

@@ -102,6 +102,16 @@
 
 ---
 
+### Решение проблем (Troubleshooting)
+
+**Ошибка: `Authentication expired or invalid`**
+Если вы получаете такую ошибку в Claude/Cursor, это означает, что у Playwright-сессии истек срок действия токенов Google. 
+**Решение:** 
+1. Снова выполните команду логина: `venv\Scripts\notebooklm.exe login` (Windows) или `./venv/bin/notebooklm login` (Mac/Linux).
+2. Убедитесь, что в файле конфигурации вашего MCP-клиента (например, `claude_desktop_config.json`) прописан параметр `"cwd": "/absolute/path/to/notebooklm-mcp"`. Это гарантирует, что сервер всегда запускается из правильной папки и не теряет сессию.
+
+---
+
 ### Развертывание в Docker
 
 Для сборки и запуска через Docker:
