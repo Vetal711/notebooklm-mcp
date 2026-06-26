@@ -103,11 +103,15 @@ If you prefer to configure everything manually or use a global Python environmen
 
 ### Troubleshooting
 
-**Error: `Authentication expired or invalid`**
+**Error: `Authentication expired`**
 If you receive this error in Claude/Cursor, it means the Playwright session's Google tokens have expired.
+**WARNING: DO NOT run the login command inside the AI agent's chat or terminal!** AI agents run in a background window station, which makes the popup browser window completely invisible, causing the login process to hang forever.
+
 **Solution:**
-1. Run the login command again: `venv\Scripts\notebooklm.exe login` (Windows) or `./venv/bin/notebooklm login` (Mac/Linux).
-2. Ensure that your MCP client's configuration file (e.g., `claude_desktop_config.json`) includes the `"cwd": "/absolute/path/to/notebooklm-mcp"` parameter. This ensures the server always runs from the correct folder and doesn't lose the session.
+1. Open a standard, real OS terminal (or just double-click the script).
+2. Run `login.bat` (Windows) or `login.sh` (Mac/Linux) located in the project folder.
+3. A visible browser window will appear. Complete the login, and the window will close automatically.
+4. Ensure that your MCP client's configuration file (e.g., `claude_desktop_config.json`) includes the `"cwd": "/absolute/path/to/notebooklm-mcp"` parameter so it doesn't lose the session again.
 
 ---
 
